@@ -49,6 +49,7 @@ CDN fallback:
 Ensure data can still be fetched from the server if CDN fails.
 
 Stateless Web Tier
+![Stateless Architechture](Image/stateless_Architechture.png)
 In a stateless architecture, session data is stored in persistent storage (like a relational DB or NoSQL DB), not on web servers.
 
 Benefits:
@@ -59,6 +60,7 @@ Scales better and handles server failures more easily.
 Shared storage examples: Redis, Memcached, NoSQL DB.
 
 Stateful Architecture
+![StateFul Architechture](Image/stateful_architechture.png)
 In a stateful architecture, client session data is stored on the specific server handling the request.
 
 Drawbacks:
@@ -84,6 +86,7 @@ Data synchronization: Replicate data across regions to prevent inconsistencies.
 Test and deployment: Need consistency across data centers.
 
 Message Queue (MQ)
+![Message Queue](Image/MQ.png)
 A message queue decouples producers and consumers.
 
 How It Works:
