@@ -23,10 +23,14 @@ Mitigating failures:
 Use over-provisioned memory or multiple cache servers across regions to avoid a single point of failure.
 
 Content Delivery Network (CDN)
-![CDN FLOW](Image/cdn.png)
+
+<p align="center">
+  <img src="Image/cdn.png" alt="CDN FLOW" width="600"/>
+</p>
 A CDN is a geographically distributed network of servers used to deliver static content (e.g., images, videos, CSS, JS files).
 
 How It Works:
+
 When a user requests an asset:
 
 If present in CDN → served directly (faster).
@@ -36,6 +40,7 @@ If not → fetched from the origin server, cached in CDN with a TTL (time-to-liv
 Other users requesting the same asset get it from the CDN (if TTL not expired).
 
 Considerations:
+
 Cost: CDNs are provided by third parties and charge based on data transfers.
 
 Cache expiry:
@@ -49,7 +54,11 @@ CDN fallback:
 Ensure data can still be fetched from the server if CDN fails.
 
 Stateless Web Tier
-![Stateless Architechture](Image/stateless_Architechture.png)
+
+<p align="center">
+  <img src="Image/stateless_Architechture.png" alt="Stateless Architechture" width="600"/>
+</p>
+
 In a stateless architecture, session data is stored in persistent storage (like a relational DB or NoSQL DB), not on web servers.
 
 Benefits:
@@ -60,7 +69,11 @@ Scales better and handles server failures more easily.
 Shared storage examples: Redis, Memcached, NoSQL DB.
 
 Stateful Architecture
-![StateFul Architechture](Image/stateful_architechture.png)
+
+<p align="center">
+  <img src="Image/stateful_architechture.png" alt="StateFul Architechture" width="600"/>
+</p>
+
 In a stateful architecture, client session data is stored on the specific server handling the request.
 
 Drawbacks:
@@ -86,7 +99,10 @@ Data synchronization: Replicate data across regions to prevent inconsistencies.
 Test and deployment: Need consistency across data centers.
 
 Message Queue (MQ)
-![Message Queue](Image/MQ.png)
+
+<p align="center">
+  <img src="Image/MQ.png" alt="Message Queue" width="600"/>
+</p>
 A message queue decouples producers and consumers.
 
 How It Works:
