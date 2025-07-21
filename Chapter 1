@@ -23,7 +23,7 @@ Mitigating failures:
 Use over-provisioned memory or multiple cache servers across regions to avoid a single point of failure.
 
 Content Delivery Network (CDN)
-![CDN FLOW](image/cdn.png)
+![CDN FLOW](Image/cdn.png)
 A CDN is a geographically distributed network of servers used to deliver static content (e.g., images, videos, CSS, JS files).
 
 How It Works:
