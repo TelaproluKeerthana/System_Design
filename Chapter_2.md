@@ -15,16 +15,24 @@ Understanding data volumes in powers of 2 is fundamental in computer systems:
 1 TB = 2⁴⁰ Bytes = 1,099,511,627,776 Bytes
 
 ⚡ Latency Numbers (Rough Estimates)
+
 Latency is the time taken to perform operations such as accessing data. Here's a general sense of how long common operations take:
 
 Operation	Time Taken (approx.)
 L1 Cache Access	~0.5 ns
+
 L2 Cache Access	~7 ns
+
 Main Memory Access (RAM)	~100 ns
+
 SSD Disk I/O	~100 µs
+
 Rotational Disk I/O	~1-10 ms
+
 Network (within data center)	~0.5 ms
+
 Network (cross data center/region)	~50-150 ms
+
 ![Latency Table](Image/latencyNumbers.png)
 
 Key Takeaways:
@@ -40,11 +48,7 @@ Data transfer across data centers introduces significant delay; plan accordingly
 🟢 Availability Numbers (The “Nines”)
 Availability indicates the percentage of time a system is operational. Here’s what the common "9's" mean in real-world downtime:
 
-Availability	Downtime per Year	Downtime per Day
-99%	3.65 days	14.4 mins
-99.9%	8.76 hours	1.44 mins
-99.99%	52.56 mins	8.64 secs
-99.999%	5.26 mins	0.864 secs
+![Availability Chart](Image/Availability%20Numbers.png)
 
 Note:
 Service providers often commit to "four nines" (99.99%), meaning up to ~52.5 minutes of downtime annually.
