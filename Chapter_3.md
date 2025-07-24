@@ -29,7 +29,7 @@ System design interviews evaluate how you approach building scalable, reliable, 
 
 4. High-Level Design
    
-    Present a bird’s-eye view of your system.
+   Present a bird’s-eye view of your system.
     
     Identify major components: API layer, service layer, database, cache, queue, CDN, etc.
   
@@ -41,7 +41,7 @@ System design interviews evaluate how you approach building scalable, reliable, 
     
     Discuss how data is accessed, indexed, and sharded
 
-7. Component Breakdown
+6. Component Breakdown
 
     Start discussing each component in this order (unless directed otherwise):
     
@@ -60,15 +60,7 @@ System design interviews evaluate how you approach building scalable, reliable, 
     Storage (e.g., S3, blob stores)
 
 
-8. Data Modeling (Optional if time allows)
-
-    Define schema (tables, fields, relationships)
-    
-    Discuss how data is accessed, indexed, and sharded
-
-
-9. Scalability and Performance
-
+7. Scalability and Performance
 
     Horizontal vs vertical scaling
     
@@ -78,8 +70,7 @@ System design interviews evaluate how you approach building scalable, reliable, 
     
     Use read replicas, write masters, or multi-master setups
 
-10. Bottlenecks & Trade-offs
-
+8. Bottlenecks & Trade-offs
    
     Identify the system’s weakest link under scale.
     
@@ -93,8 +84,7 @@ System design interviews evaluate how you approach building scalable, reliable, 
     
     Discuss availability vs consistency (CAP theorem)
 
-11. Reliability and Redundancy
-
+9. Reliability and Redundancy
    
     Use health checks, failover, and auto-scaling.
     
@@ -102,8 +92,7 @@ System design interviews evaluate how you approach building scalable, reliable, 
     
     Backup and disaster recovery strategies.
 
-12. Security Considerations
-
+10. Security Considerations
 
     Authentication & authorization (e.g., OAuth, JWT)
     
@@ -111,8 +100,7 @@ System design interviews evaluate how you approach building scalable, reliable, 
     
     Rate limiting, input validation, abuse detection
 
-13. Monitoring and Metrics
-
+11. Monitoring and Metrics
     
     What to monitor: request latency, error rates, CPU/memory/disk
     
