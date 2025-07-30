@@ -62,7 +62,9 @@ The Token Bucket algorithm is commonly used due to its flexibility and efficienc
 A bucket with a fixed capacity holds "tokens".
 
 Tokens are added at a regular interval (refill rate).
-[]
+
+![Token Bucket](Image/tokenBucket.png)
+
 Each request consumes one token.
 
 If a request arrives and no tokens are available, it is rejected or delayed.
