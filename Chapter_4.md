@@ -110,7 +110,7 @@ If the queue is not full, the request is added.
 If the queue is full, the request is dropped.
 
 Requests are processed at a constant rate (outflow rate), regardless of burst traffic.
-
+![Leaky Bucket](Image/leakingbucket.png)
 ⚙️ Parameters:
 
 Bucket size – Maximum number of requests the queue can hold.
@@ -171,17 +171,23 @@ Check how many timestamps are within the rolling window.
 
 Accept or reject based on this count.
 
-✅ Pros:
-Highly accurate — ensures no window exceeds the limit.
+![Sliding Window Log](Image/windowlog.png)
 
-Solves the spike issue present in Fixed Window Counter.
+✅ Pros:
+
+    Highly accurate — ensures no window exceeds the limit.
+    
+    Solves the spike issue present in Fixed Window Counter.
 
 ❌ Cons:
-Memory-intensive — stores every timestamp, even for rejected requests.
 
-May be costly at scale without optimization.
+    Memory-intensive — stores every timestamp, even for rejected requests.
+    
+    May be costly at scale without optimization.
 
 ⚖️ Sliding Window Counter Algorithm
+
+
 A hybrid approach that combines Fixed Window Counter and Sliding Window Log. It estimates the request count using the current and previous time windows for a smoother rate limiting effect.
 
 🛠️ How it Works:
@@ -202,6 +208,8 @@ Assumes even distribution of past requests, which may not always hold.
 However, in practice (e.g., Cloudflare tests), inaccuracy is negligible (~0.003% errors over 400M requests).
 
 🏗️ High-Level Architecture Overview
+
+
 To implement rate limiting effectively:
 
 Maintain a counter per user/IP/API key.
@@ -213,6 +221,7 @@ If the counter exceeds the defined limit, reject the request.
 Otherwise, increment the counter and allow the request.
 
 🧠 Where to Store the Counter?
+
 Disk-based storage is slow and not ideal for real-time rate limiting.
 
 In-memory cache (e.g., Redis) is the preferred solution:
@@ -220,3 +229,6 @@ In-memory cache (e.g., Redis) is the preferred solution:
 Fast read/write.
 
 Built-in support for TTL (time-to-live) expiration.
+
+![Rate Limiter](Image/ratelimiter
+-hld.png)
