@@ -79,23 +79,23 @@ Example: If a system must allow 5 friend requests/day and 10 messages/minute, us
 ✅ Pros
 
 
-Simple to Implement: Straightforward logic, widely supported in libraries and frameworks.
-
-Memory Efficient: Requires only counters and a timestamp for refill logic.
-
-Supports Bursts: Unlike Leaky Bucket, it allows occasional high-traffic bursts.
-
-Flexible Configuration: Adjustable bucket size and refill rate enable fine-tuned control.
-
-Real-Time Enforcement: Immediate decision on whether to accept or reject a request.
+    Simple to Implement: Straightforward logic, widely supported in libraries and frameworks.
+    
+    Memory Efficient: Requires only counters and a timestamp for refill logic.
+    
+    Supports Bursts: Unlike Leaky Bucket, it allows occasional high-traffic bursts.
+    
+    Flexible Configuration: Adjustable bucket size and refill rate enable fine-tuned control.
+    
+    Real-Time Enforcement: Immediate decision on whether to accept or reject a request.
 
 ❌ Cons
 
-Tuning Complexity: Choosing the right refill rate and bucket size depends on expected traffic, making configuration tricky.
-
-Time Synchronization: In distributed systems, maintaining accurate time or using centralized storage (e.g., Redis) adds complexity.
-
-Not Ideal for Hard Limits: If exact request limits per interval are needed, sliding window counters may offer stricter enforcement.
+    Tuning Complexity: Choosing the right refill rate and bucket size depends on expected traffic, making configuration tricky.
+    
+    Time Synchronization: In distributed systems, maintaining accurate time or using centralized storage (e.g., Redis) adds complexity.
+    
+    Not Ideal for Hard Limits: If exact request limits per interval are needed, sliding window counters may offer stricter enforcement.
 
 💧 Leaky Bucket Algorithm
 
@@ -191,21 +191,24 @@ Accept or reject based on this count.
 A hybrid approach that combines Fixed Window Counter and Sliding Window Log. It estimates the request count using the current and previous time windows for a smoother rate limiting effect.
 
 🛠️ How it Works:
+
 Request Count =
 requests in current window +
 requests in previous window * overlap percentage.
 
 ✅ Pros:
-Reduces spikes — averages traffic over sliding windows.
 
-More memory efficient than sliding log.
+    Reduces spikes — averages traffic over sliding windows.
+    
+    More memory efficient than sliding log.
 
 ❌ Cons:
-Approximate rather than exact.
 
-Assumes even distribution of past requests, which may not always hold.
-
-However, in practice (e.g., Cloudflare tests), inaccuracy is negligible (~0.003% errors over 400M requests).
+    Approximate rather than exact.
+    
+    Assumes even distribution of past requests, which may not always hold.
+    
+    However, in practice (e.g., Cloudflare tests), inaccuracy is negligible (~0.003% errors over 400M requests).
 
 🏗️ High-Level Architecture Overview
 
@@ -230,5 +233,13 @@ Fast read/write.
 
 Built-in support for TTL (time-to-live) expiration.
 
-![Rate Limiter](Image/ratelimiter
--hld.png)
+🔧 Redis Commands Used
+| Command  | Purpose                                                               |
+| -------- | --------------------------------------------------------------------- |
+| `INCR`   | Increments the request counter                                        |
+| `EXPIRE` | Sets a time window (e.g., 60s); the counter is auto-deleted after TTL |
+
+
+![Rate Limiter](Image/ratelimiter_hld.png)
+
+
