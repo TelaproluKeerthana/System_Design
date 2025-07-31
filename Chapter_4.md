@@ -91,9 +91,132 @@ Real-Time Enforcement: Immediate decision on whether to accept or reject a reque
 
 ❌ Cons
 
-
 Tuning Complexity: Choosing the right refill rate and bucket size depends on expected traffic, making configuration tricky.
 
 Time Synchronization: In distributed systems, maintaining accurate time or using centralized storage (e.g., Redis) adds complexity.
 
 Not Ideal for Hard Limits: If exact request limits per interval are needed, sliding window counters may offer stricter enforcement.
+
+💧 Leaky Bucket Algorithm
+
+
+The Leaky Bucket (LB) algorithm is similar to the Token Bucket but processes requests at a fixed rate, making it ideal for steady throughput systems. It is typically implemented using a FIFO queue.
+
+🛠️ How it Works:
+Each incoming request is placed in a fixed-size queue.
+
+If the queue is not full, the request is added.
+
+If the queue is full, the request is dropped.
+
+Requests are processed at a constant rate (outflow rate), regardless of burst traffic.
+
+⚙️ Parameters:
+
+Bucket size – Maximum number of requests the queue can hold.
+
+Outflow rate – Rate at which requests are processed.
+
+✅ Pros:
+    
+    Memory efficient due to limited queue size.
+    
+    Ensures consistent and smooth processing rate, good for stable systems.
+
+❌ Cons:
+
+    A traffic burst can fill the queue with older requests, potentially starving newer ones.
+    
+    Like Token Bucket, choosing the right size and rate can be tricky.
+
+📏 Fixed Window Counter Algorithm
+
+This algorithm uses a fixed time window (e.g., 1 minute) and counts requests within that window. If the request count exceeds a set threshold, further requests are blocked until the window resets.
+
+🛠️ How it Works:
+    
+    Define a fixed interval (e.g., 1 minute).
+    
+    Count the number of requests during that interval.
+    
+    Reject any request exceeding the threshold until the next window starts.
+
+✅ Pros:
+
+
+Very memory efficient.
+
+    Simple to implement and understand.
+    
+    Ideal for use cases where quota resets at fixed time intervals are acceptable.
+
+❌ Cons:
+
+
+    Vulnerable to spikes at window edges (e.g., burst at 59s and again at 0s).
+    
+    May allow more requests than the defined threshold in short bursts.
+
+⏱️ Sliding Window Log Algorithm
+This algorithm improves upon Fixed Window Counter by tracking exact timestamps of requests. It ensures a rolling rate limit is enforced more accurately.
+
+🛠️ How it Works:
+Store a log of timestamps (commonly in a Redis sorted set).
+
+For each new request:
+
+Remove expired timestamps.
+
+Check how many timestamps are within the rolling window.
+
+Accept or reject based on this count.
+
+✅ Pros:
+Highly accurate — ensures no window exceeds the limit.
+
+Solves the spike issue present in Fixed Window Counter.
+
+❌ Cons:
+Memory-intensive — stores every timestamp, even for rejected requests.
+
+May be costly at scale without optimization.
+
+⚖️ Sliding Window Counter Algorithm
+A hybrid approach that combines Fixed Window Counter and Sliding Window Log. It estimates the request count using the current and previous time windows for a smoother rate limiting effect.
+
+🛠️ How it Works:
+Request Count =
+requests in current window +
+requests in previous window * overlap percentage.
+
+✅ Pros:
+Reduces spikes — averages traffic over sliding windows.
+
+More memory efficient than sliding log.
+
+❌ Cons:
+Approximate rather than exact.
+
+Assumes even distribution of past requests, which may not always hold.
+
+However, in practice (e.g., Cloudflare tests), inaccuracy is negligible (~0.003% errors over 400M requests).
+
+🏗️ High-Level Architecture Overview
+To implement rate limiting effectively:
+
+Maintain a counter per user/IP/API key.
+
+For each incoming request:
+
+If the counter exceeds the defined limit, reject the request.
+
+Otherwise, increment the counter and allow the request.
+
+🧠 Where to Store the Counter?
+Disk-based storage is slow and not ideal for real-time rate limiting.
+
+In-memory cache (e.g., Redis) is the preferred solution:
+
+Fast read/write.
+
+Built-in support for TTL (time-to-live) expiration.
