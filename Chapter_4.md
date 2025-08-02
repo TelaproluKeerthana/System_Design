@@ -243,3 +243,110 @@ Built-in support for TTL (time-to-live) expiration.
 ![Rate Limiter](Image/ratelimiter_hld.png)
 
 
+🔍 Step 3: Design Deep Dive
+📜 How Are Rate Limiting Rules Created and Stored?
+Rate limiting rules define how many requests are allowed over a given time unit per specific context (like user, IP, or endpoint). These rules can be organized by domain and descriptors.
+
+🧩 Example from Lyft's Open Source Rate Limiter:
+yaml
+Copy
+Edit
+domain: auth
+descriptors:
+  - key: auth_type
+    value: login
+    rate_limit:
+      unit: minute
+      requests_per_unit: 5
+In this example, clients are allowed to perform 5 login attempts per minute in the auth domain.
+
+⛔ Handling Rate Limited Requests
+When the number of requests exceeds the threshold:
+
+The API returns HTTP 429 (Too Many Requests).
+
+Some systems may queue or delay the request (deferred processing), depending on the business logic.
+
+📨 Rate Limiting Response Headers
+To inform clients about throttling status, servers often include the following headers in responses:
+
+| Header                    | Description                                   |
+| ------------------------- | --------------------------------------------- |
+| `X-RateLimit-Limit`       | Maximum number of requests allowed            |
+| `X-RateLimit-Remaining`   | Requests remaining in the current time window |
+| `X-RateLimit-Retry-After` | Time to wait (in seconds) before retrying     |
+
+These headers help the client handle retries and backoff logic gracefully.
+
+🧠 Internal Working of a Rate Limiter
+
+    Client sends a request.
+    
+    Middleware intercepts the request before hitting the API server.
+    
+    Middleware loads rate limit rules from disk (or config service) into in-memory cache.
+    
+    It checks the timestamp counter in Redis (or other store).
+    
+    If the threshold is not exceeded, the request is forwarded to the backend.
+    
+    If the threshold is exceeded, a 429 response is returned.
+
+🌐 Rate Limiter in a Distributed Environment
+
+Distributed systems introduce new challenges:
+
+🧨 Race Conditions
+
+When multiple threads/processes access and update shared state (e.g., Redis counters), data inconsistencies may occur, allowing extra requests unintentionally.
+
+✅ Solution:
+
+    Use Redis Lua scripts for atomic operations.
+    
+    Use sorted sets to store timestamps with efficient pruning.
+
+🔄 Synchronization Issues
+
+If a user request is handled by different rate limiters (e.g., across services or instances), they might not share the same view of request state.
+
+✅ Solutions:
+
+    Use sticky sessions to route requests from the same client to the same instance.
+    
+    Use a centralized data store like Redis to store counters globally.
+    
+    Employ consistent hashing if running multiple Redis instances.
+
+🚀 Performance Optimizations
+
+    Deploy rate limiter infrastructure in multiple data centers (multi-region setup) to reduce latency for geographically distributed users.
+    
+    Use edge locations (via CDN or cloud provider) to route requests to the nearest rate limiter.
+    
+    Sync data with eventual consistency (when strict accuracy isn’t required).
+
+📈 Monitoring & Observability
+
+Monitoring is crucial to evaluate the effectiveness of the rate limiter:
+
+Track metrics like:
+    
+    Number of 429 responses
+    
+    Average request rate
+    
+    Peak burst patterns
+    
+    Watch for false positives (valid requests being blocked).
+    
+    Tune algorithms and thresholds based on usage patterns and analytics.
+
+✅ Tools to consider:
+
+    Grafana, Prometheus
+    
+    Redis metrics
+    
+    API Gateway analytics
+
