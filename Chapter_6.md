@@ -77,3 +77,131 @@ Data Partition:
     
     Supports automatic scaling and heterogeneity (number of virtual nodes proportional to server capacity).
 
+Data Replication
+
+    Data is replicated across N servers (N is configurable).
+    
+    Replicas are placed in different data centers for disaster recovery.
+    
+    Replication improves availability and fault tolerance.
+    
+    Replication is usually asynchronous for performance.
+
+Consistency
+
+Since data is distributed across multiple replicas, all of them must be synchronized.
+
+Quorum consensus helps ensure consistency:
+
+    W → Write quorum (number of replicas that must acknowledge a write).
+    
+    R → Read quorum (number of replicas to check during a read).
+    
+    If W + R > N, strong consistency is guaranteed.
+
+Consistency models:
+
+    Strong consistency → Always read the latest value.
+    
+    Weak consistency → Reads may return stale data.
+    
+    Eventual consistency → Given enough time, all replicas converge.
+
+Inconsistency Resolution
+
+    Versioning: Each update creates a new immutable version.
+    
+    Vector clocks: Store [server, version] pairs to track causality.
+    
+    Conflicts can be detected and resolved by comparing versions.
+
+Handling Failures
+
+Failure Detection
+
+    Simple heartbeats are unreliable in large clusters.
+    
+    Gossip protocol:
+    
+          Nodes periodically exchange membership and heartbeat info.
+          
+          Consensus from multiple peers is used to mark a node as down.
+
+Temporary Failures
+
+    Sloppy quorum: Write/read from the first available nodes instead of strict quorum.
+    
+    Data is later replicated back to the original node once it recovers.
+
+Permanent Failures
+
+    Anti-entropy protocols (using Merkle Trees) compare replicas and sync differences.
+    
+    Merkle tree: Each non-leaf node stores a hash of its children → allows efficient detection of differences without scanning all data.
+
+System Architecture  
+
+    flowchart TD
+    Client[Client] --> API[API Layer]
+    API --> Coordinator[Coordinator Node]
+    Coordinator --> Node1[Storage Node 1]
+    Coordinator --> Node2[Storage Node 2]
+    Coordinator --> Node3[Storage Node 3]
+    Node1 <--> Node2
+    Node2 <--> Node3
+    Node1 <--> Node3
+
+    Clients talk to the system through APIs.
+    
+    Coordinator node routes requests.
+    
+    Each storage node is equal (decentralized, no single point of failure).
+    
+    Data is replicated across multiple nodes.
+    
+    Nodes can be added/removed automatically.
+
+
+Write Path
+
+sequenceDiagram
+
+    participant C as Client
+    participant Co as Coordinator
+    participant CL as Commit Log
+    participant MC as MemTable (In-Memory)
+    participant ST as SSTable (Disk)
+
+    C->>Co: Write Request (key, value)
+    Co->>CL: Append to Commit Log
+    Co->>MC: Write to MemTable
+    MC->>ST: Flush to SSTable when full
+    Co-->>C: Acknowledge Write
+
+
+Read Path
+
+sequenceDiagram
+   
+    participant C as Client
+    participant Co as Coordinator
+    participant MC as MemTable (In-Memory)
+    participant BF as Bloom Filter
+    participant ST as SSTable (Disk)
+
+    C->>Co: Read Request (key)
+    Co->>MC: Check in MemTable
+    alt Found in MemTable
+        MC-->>Co: Return Value
+    else Not Found
+        Co->>BF: Check Bloom Filter
+        BF->>ST: Lookup Key in SSTable
+        ST-->>Co: Return Value
+    end
+    Co-->>C: Send Value
+
+
+
+
+  
+
