@@ -8,11 +8,11 @@ In distributed systems, generating **unique IDs** is challenging because there i
 
 An effective ID generator must satisfy the following:
 
-- IDs must be **globally unique**  
-- IDs are **numeric only**  
-- IDs fit within a **64-bit integer**  
-- IDs are **time-ordered** (newer IDs > older IDs)  
-- Capable of generating **10,000+ unique IDs per second**  
+- IDs must be **globally unique**
+- IDs are **numeric only**
+- IDs fit within a **64-bit integer**
+- IDs are **time-ordered** (newer IDs > older IDs)
+- Capable of generating **10,000+ unique IDs per second**
 
 ---
 
@@ -21,41 +21,41 @@ An effective ID generator must satisfy the following:
 Several solutions can be considered:
 
 ### 1. Multi-Master Replication
-- Uses auto-increment with an **increment step = number of servers**  
-- Example: Server A generates IDs `1, 4, 7…` and Server B generates `2, 5, 8…`  
-- **Cons:**  
-  - Difficult to scale across multiple data centers  
-  - IDs may not be evenly time-ordered across servers  
+- Uses auto-increment with an **increment step = number of servers**
+- Example: Server A generates IDs `1, 4, 7…` and Server B generates `2, 5, 8…`
+- **Cons:**
+  - Difficult to scale across multiple data centers
+  - IDs may not be evenly time-ordered across servers
 
 ---
 
 ### 2. UUID (Universally Unique Identifier)
-- 128-bit values, commonly used for uniqueness  
-- Each server can generate IDs independently → **no synchronization needed**  
-- **Pros:**  
-  - Scales easily, avoids conflicts  
-- **Cons:**  
-  - Not numeric (contains alphanumeric data)  
-  - Exceeds 64-bit requirement  
-  - IDs are not time-ordered  
+- 128-bit values, commonly used for uniqueness
+- Each server can generate IDs independently → **no synchronization needed**
+- **Pros:**
+  - Scales easily, avoids conflicts
+- **Cons:**
+  - Not numeric (contains alphanumeric data)
+  - Exceeds 64-bit requirement
+  - IDs are not time-ordered
 
 ---
 
 ### 3. Ticket Server
-- A centralized service issues sequential IDs to clients  
-- **Pros:**  
-  - Generates numeric IDs  
-  - Simple to implement  
-- **Cons:**  
-  - **Single point of failure** if only one ticket server exists  
-  - Can become a performance bottleneck  
-  - Multiple ticket servers require careful coordination  
+- A centralized service issues sequential IDs to clients
+- **Pros:**
+  - Generates numeric IDs
+  - Simple to implement
+- **Cons:**
+  - **Single point of failure** if only one ticket server exists
+  - Can become a performance bottleneck
+  - Multiple ticket servers require careful coordination
 
 ---
 
 ### 4. Twitter Snowflake
-- A **widely adopted solution** for scalable unique ID generation  
-- Generates a 64-bit integer composed of the following parts:  
+- A **widely adopted solution** for scalable unique ID generation
+- Generates a 64-bit integer composed of the following parts:
 
 | Bits | Field          | Description |
 |------|---------------|-------------|
@@ -65,10 +65,10 @@ Several solutions can be considered:
 | 5    | Machine ID     | Identifies the machine within a data center |
 | 12   | Sequence No.   | Counter for IDs generated within the same millisecond |
 
-- **Pros:**  
-  - Fits within 64 bits  
-  - Time-ordered IDs  
-  - No central bottleneck → distributed & scalable  
+- **Pros:**
+  - Fits within 64 bits
+  - Time-ordered IDs
+  - No central bottleneck → distributed & scalable
 
 ---
 
