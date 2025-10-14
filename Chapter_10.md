@@ -232,7 +232,7 @@ This ensures timely delivery during traffic spikes.
 
 ---
 
-### ✅ Summary
+### ✅ Deep Dive - Summary
 
 | Feature | Reliability Benefit |
 |----------|---------------------|
