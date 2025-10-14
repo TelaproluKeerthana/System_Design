@@ -71,33 +71,33 @@ flowchart TD
 ## 🚀 Scalability & Reliability
 
 
-Load Balancing: Handles heavy traffic using multiple API servers.
+- Load Balancing: Handles heavy traffic using multiple API servers.
 
-Asynchronous Processing: Uses queues to avoid blocking operations.
+- Asynchronous Processing: Uses queues to avoid blocking operations.
 
-Retry Mechanism: Retries failed notifications automatically.
+- Retry Mechanism: Retries failed notifications automatically.
 
-Dead Letter Queue: Stores failed events for debugging or reprocessing.
+- Dead Letter Queue: Stores failed events for debugging or reprocessing.
 
-Horizontal Scaling: Workers can scale based on message volume.
+- Horizontal Scaling: Workers can scale based on message volume.
 
-Monitoring: Integration with tools like Prometheus / Grafana for metrics.
+- Monitoring: Integration with tools like Prometheus / Grafana for metrics.
 
 ---
 
 ## 📈 End-to-End Flow Summary
 
-User performs an action that triggers an event.
+- User performs an action that triggers an event.
 
-The event is sent to the notification service via API.
+- The event is sent to the notification service via API.
 
-The event is queued for background processing.
+- The event is queued for background processing.
 
-The worker fetches the job and determines the channel.
+- The worker fetches the job and determines the channel.
 
-The worker sends the message to the respective provider.
+- The worker sends the message to the respective provider.
 
-Provider delivers to the device/email/SMS endpoint.
+- Provider delivers to the device/email/SMS endpoint.
 
 Response is logged and status updated in the database. 
 
