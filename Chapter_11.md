@@ -1,6 +1,8 @@
 # Design a News Feed System
 
-A News Feed system displays a dynamic list of posts (text, images, videos) from people a user follows. Examples: **Facebook News Feed**, **Instagram Feed**, **Twitter Timeline**.
+A News Feed system displays a continuously updated list of posts from people a user follows. Modern users expect low latency, relevant ordering, media-rich content, and a near-real-time refresh experience.
+
+Examples in industry: Facebook Feed, Instagram Timeline, Twitter/X Home, LinkedIn Feed
 
 ---
 
@@ -21,7 +23,7 @@ Before designing, clarify:
 4. **Scale**  
    - Average followers per user  
    - Daily Active Users (DAU)  
-   - Posts per second  
+   - Posts per day  
    - Data retention period  
 
 ### 1.2 Functional Requirements
@@ -41,14 +43,22 @@ Before designing, clarify:
 ---
 
 ## 2. High-Level Architecture Overview
+ 
+Architecture has two core flows:
+- Write Path (Publish → Fanout → Store)
 
-The system has two core flows:
+- Read Path (Read Feed from Cache → Render)
 
-- **Feed Publishing (Write Path)**  
-- **Feed Retrieval (Read Path)**  
+Key components:
+- API Gateway / Load Balancer
+- Post Service
+- Feed Service
+- User Graph Service
+- Fanout Worker Service
+- Message Queue (MQ)
+- Cache layer
 
-![Architecture](#)  
-
+Object/Media storage
 ---
 
 ## 3. Feed Publishing (Write Path)
