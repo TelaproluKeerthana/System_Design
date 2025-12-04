@@ -57,8 +57,7 @@ Key components:
 - Fanout Worker Service
 - Message Queue (MQ)
 - Cache layer
-
-Object/Media storage
+- Object/Media storage
 ---
 
 ## 3. Feed Publishing (Write Path)
@@ -68,7 +67,7 @@ Occurs whenever a user creates a new post.
 ### 3.1 Flow
 1. Client → Web Server (auth, rate limit)  
 2. Post Service writes post to **Post DB** + **Post Cache**  
-3. Fanout Service distributes post to followers  
+3. Fanout Service distributes the post to followers  
 4. News Feed Cache is updated  
 
 ### 3.2 Web Servers
@@ -162,9 +161,9 @@ Triggered when a user loads their home feed.
 2. CDN → Web Server → Feed Service  
 3. Fetch post IDs from **Feed Cache**  
 4. Fetch metadata from:
-- User Profile Cache  
-- Post Cache  
-- Post DB fallback  
+   - User Profile Cache  
+   - Post Cache  
+   - Post DB fallback  
 5. Merge, enrich, sort  
 6. Return JSON feed to client  
 
